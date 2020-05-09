@@ -13,11 +13,14 @@ namespace getradiogroup {
             let radioGroup = 0;
             let recievedStrings:string[];
 
-            RecievedString = ""
-            radio.setGroup(0)
+            radio.setGroup(0);
+            radio.setTransmitPower(0);
+
             let startTime = input.runningTime()
+
             while (input.runningTime() < startTime + toValue && radioGroup == 0) {
-                if (RecievedString != "" && radio.receivedPacket(RadioPacketProperty.SignalStrength) >= -70) {
+                RecievedString = radio.receiveString();
+                if (RecievedString != "" /*&& radio.receivedPacket(RadioPacketProperty.SignalStrength) >= -70*/) {
                     recievedStrings = split.split(RecievedString)
                     if (recievedStrings[0] == "CQ") {
                         radio.sendString(recievedStrings[1] + "," + control.deviceName() + "," + convertToText(Math.randomRange(10, 99)))
@@ -31,9 +34,7 @@ namespace getradiogroup {
                     radio.sendString("CQ," + control.deviceName())
                 }
             }
+            radio.setGroup(radioGroup);
             return radioGroup
         }
-        radio.onReceivedString(function (receivedString) {
-            RecievedString = receivedString
-        })
     }
