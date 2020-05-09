@@ -3,37 +3,43 @@
  */
 //% color=#1eb0f0 icon="\uf0ad" block="getRadioGroup"
 namespace getradiogroup {
-    let RecievedString:string;
+    let radioGroup=0;
+    let rGroup=0,sGroup=0;
+    let startTime=0;
+    let toTime=0;
+    /**
+      * init radio group
+      */
+    //% blockId=init block="init radio group"
+    export function init():void {
+        startTime=input.runningTime();
+        toTime = startTime + Math.randomRange(10, 50);
+        radioGroup = 0;
+        radio.setGroup(radioGroup)
+        radio.setTransmitPower(0)
+    }
     /**
       * get radio group
-      * @param toValue Time out value, eg: 10000
+      * @param to Time out value [mS], eg: 10000
       */
     //% blockId=getRadioGroup block="get radio group %to"
-    export function getRadioGroup(toValue: number): number {
-            let radioGroup = 0;
-            let recievedStrings:string[];
-
-            RecievedString = ""
-            radio.setGroup(0)
-            let startTime = input.runningTime()
-            while (input.runningTime() < startTime + toValue && radioGroup == 0) {
-                if (RecievedString != "" && radio.receivedPacket(RadioPacketProperty.SignalStrength) >= -70) {
-                    recievedStrings = split.split(RecievedString)
-                    if (recievedStrings[0] == "CQ") {
-                        radio.sendString(recievedStrings[1] + "," + control.deviceName() + "," + convertToText(Math.randomRange(10, 99)))
-                    } else if (recievedStrings[0] == control.deviceName()) {
-                        radioGroup = parseFloat(recievedStrings[2])
-                        radio.sendString(recievedStrings[1] + "," + control.deviceName() + "," + convertToText(recievedStrings[2]))
-                    }
-                }
-                basic.pause(Math.randomRange(50, 1000))
-                if (radioGroup == 0) {
-                    radio.sendString("CQ," + control.deviceName())
-                }
-            }
-            return radioGroup
+    function getRadioGroup(rData: string):number {
+        if (radioGroup == 0 && input.runningTime() > toTime) {
+            radio.sendString("CQ," + control.deviceName())
+            toTime = startTime + Math.randomRange(1000, 1050);
         }
-        radio.onReceivedString(function (receivedString) {
-            RecievedString = receivedString
-        })
+        if (rData != "") {
+            let rStrings = split.split(rData)
+            if (rStrings[0] == "CQ") {
+                sGroup = Math.randomRange(10, 99)
+                radio.sendString("" + rStrings[1] + "," + control.deviceName() + "," + convertToText(sGroup))
+            } else if (rStrings[0] == control.deviceName()) {
+                rGroup = parseFloat(rStrings[2])
+                radio.sendString("" + rStrings[1] + "," + control.deviceName() + "," + convertToText(rGroup))
+                radioGroup=rGroup;
+                radio.setGroup(radioGroup)
+           }
+        }
+        return (radioGroup);
     }
+}
