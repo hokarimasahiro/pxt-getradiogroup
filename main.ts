@@ -11,8 +11,8 @@ namespace getradiogroup {
     /**
       * init radio group
       */
-    //% blockId=init block="initRadioGroup"
-    export function init() {
+    //% blockId="initRadioGroup" block="initRadioGroup"
+    export function initRadioGroup() {
         startTime = input.runningTime();
         toTime = startTime + Math.randomRange(10, 50);
         radioGroup = 0
@@ -23,7 +23,7 @@ namespace getradiogroup {
       * get radio group
       * @param rData Recieved Data, eg: "CQ,aaaa"
       */
-    //% blockId=getRadioGroup block="get radio group %rData"
+    //% blockId="getRadioGroup" block="get radio group %rData"
     export function getRadioGroup(rData: string): number {
         if (radioGroup == 0 && input.runningTime() > toTime) {
             radio.sendString("CQ," + control.deviceName())
