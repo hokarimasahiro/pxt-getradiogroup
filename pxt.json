@@ -4,8 +4,8 @@
     "description": "",
     "dependencies": {
         "core": "*",
-        "radio": "*",
-        "pxt-split": "github:hokarimasahiro/pxt-split#ccd44dbc0e5504526df8932c50b00b519160e4cc"
+        "microphone": "*",
+        "radio": "*"
     },
     "files": [
         "README.md",
