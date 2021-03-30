@@ -29,7 +29,7 @@ namespace getradiogroup {
             radio.sendString("CQ," + control.deviceName())
             toTime = input.runningTime() + Math.randomRange(1000, 1050);
         }
-        if (rData != "" && radio.receivedPacket(RadioPacketProperty.SignalStrength) > -50) {
+        if (rData != "" && radio.receivedPacket(RadioPacketProperty.SignalStrength) > -70) {
             let rStrings = rData.split(",")
             if (rStrings[0] == "CQ") {
                 sGroup = Math.randomRange(10, 99);
