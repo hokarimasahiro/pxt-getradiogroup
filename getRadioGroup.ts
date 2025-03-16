@@ -7,6 +7,7 @@ namespace getradiogroup {
     let rGroup = 0, sGroup = 0;
     let startTime = 0;
     let toTime = 0;
+    let hostName = "";
 
     /**
       * init radio group
@@ -28,8 +29,9 @@ namespace getradiogroup {
         if (rData != "" && radio.receivedPacket(RadioPacketProperty.SignalStrength) > -50) {
             let rStrings = rData.split(",")
             if (rStrings[0] == control.deviceName()) {
+                hostName = rStrings[1]
                 rGroup = parseFloat(rStrings[2])
-                radio.sendString("" + rStrings[1] + "," + control.deviceName() + "," + convertToText(rGroup))
+                radio.sendString("" + hostName + "," + control.deviceName() + "," + convertToText(rGroup))
                 radioGroup = rGroup;
                 radio.setGroup(radioGroup)
             }
@@ -38,5 +40,13 @@ namespace getradiogroup {
             toTime = input.runningTime() + Math.randomRange(1000, 1050);
         }
         return (radioGroup)
+    }
+    /**
+      * get radio group
+      * @param rData Recieved Data, eg: "CQ,aaaa"
+      */
+    //% blockId="getRadioGroup" block="get radio group %rData"
+    export function getHostName(): string {
+        return (hostName)
     }
 }
