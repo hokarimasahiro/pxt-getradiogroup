@@ -25,23 +25,17 @@ namespace getradiogroup {
       */
     //% blockId="getRadioGroup" block="get radio group %rData"
     export function getRadioGroup(rData: string): number {
-        if (radioGroup == 0 && input.runningTime() > toTime) {
-            radio.sendString("CQ," + control.deviceName())
-            toTime = input.runningTime() + Math.randomRange(1000, 1050);
-        }
         if (rData != "" && radio.receivedPacket(RadioPacketProperty.SignalStrength) > -50) {
             let rStrings = rData.split(",")
-            if (rStrings[0] == "CQ") {
-                sGroup = Math.randomRange(10, 99);
-                radio.sendString("" + rStrings[1] + "," + control.deviceName() + "," + convertToText(sGroup))
-            } else if (rStrings[0] == control.deviceName()) {
+            if (rStrings[0] == control.deviceName()) {
                 rGroup = parseFloat(rStrings[2])
                 radio.sendString("" + rStrings[1] + "," + control.deviceName() + "," + convertToText(rGroup))
                 radioGroup = rGroup;
                 radio.setGroup(radioGroup)
             }
-        } else{
-            basic.pause(100);
+        } else if (radioGroup == 0 && input.runningTime() > toTime) {
+            radio.sendString("CQ," + control.deviceName())
+            toTime = input.runningTime() + Math.randomRange(1000, 1050);
         }
         return (radioGroup)
     }
