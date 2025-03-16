@@ -42,10 +42,9 @@ namespace getradiogroup {
         return (radioGroup)
     }
     /**
-      * get radio group
-      * @param rData Recieved Data, eg: "CQ,aaaa"
+      * get host name
       */
-    //% blockId="getRadioGroup" block="get radio group %rData"
+    //% blockId="getHostName" block="get host name"
     export function getHostName(): string {
         return (hostName)
     }
